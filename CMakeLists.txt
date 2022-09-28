@@ -3,4 +3,4 @@ project(huffmanZip)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(huffmanZip main.cpp huffmanTree.cpp huffmanTree.h compress.cpp compress.h)
+add_executable(huffmanZip main.cpp huffmanTree.cpp huffmanTree.h compress.cpp compress.h processBar.cpp processBar.h)

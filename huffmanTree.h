@@ -17,7 +17,6 @@ public:
 
     node()=default;
     node(int t_data):data(t_data){}
-
 };
 
 class HuffmanTree{

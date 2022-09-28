@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <string.h>
+#include "processBar.h"
 void FileIO::readIntoBuf(const char *fileName) {
 
     FILE * q = fopen(fileName,"rb");
@@ -63,18 +64,21 @@ void Compress::compressFile() {
         buf = nullptr;
     }
     //write into stream buf.
+    std::cout<<"start compress file."<<std::endl;
+    ProcessBar bar(byteBuf.length());
     for(long i{0};i<byteBuf.length();i+=8){
         streamBuf[cnt++] = strBinToUchar(byteBuf.substr(i,8));
         if(cnt%1048576==0){
             cnt=0;
             fwrite(streamBuf,sizeof(streamBuf),1,q);
         }
+        bar.show(8);
     }
     if(cnt!=0){
         fwrite(streamBuf,sizeof(unsigned char)*cnt,1,q);
     }
     fclose(q);
-
+    std::cout<<std::endl<<"compress over!"<<std::endl;
 }
 
 void Compress::decompressFile() {
@@ -97,6 +101,8 @@ void Compress::decompressFile() {
     }
     //std::cout<<codeTxt<<std::endl;
     fclose(q);
+    std::cout<<"start decompress file."<<std::endl;
+    ProcessBar bar(codeTxt.length());
     for(const char&s:codeTxt){
         if(s=='0'){
             sign=sign->lChild;
@@ -111,11 +117,13 @@ void Compress::decompressFile() {
                 cnt=0;
             }
         }
+        bar.show();
     }
     if (cnt!=0){
         fwrite(streamBuf,sizeof (unsigned char )*cnt,1,uq);
     }
     fclose(uq);
+    std::cout<<std::endl<<"decompress over!"<<std::endl;
 }
 
 
